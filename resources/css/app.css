@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--light-blue: rgb(29 78 216 / 0.8)
+}
+
+.copy-icon:hover {
+	cursor: pointer;
+	fill: var(--light-blue);
+}
