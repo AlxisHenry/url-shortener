@@ -21,6 +21,7 @@ class ShortController extends Controller
         $perPage = 20;
         $shorts = Short::latest()->simplePaginate($perPage);
         $pagesCount = Short::count() / $perPage;
+        if ($pagesCount < 1) $pagesCount = 1;
         return Inertia::render('Shorts', [
             "shorts" => $shorts,
             "paginate" => [

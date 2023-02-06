@@ -31,10 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/my-shorts', [ShortController::class, 'show'])->name('shorts.show');
+    Route::get('/my-shorts', [ShortController::class, 'user'])->name('shorts.show');
 });
 
-Route::get('/{short:slug}', [ShortController::class, 'show'])->name('short');
-
-
 require __DIR__ . '/auth.php';
+
+Route::get('/{short:slug}', [ShortController::class, 'show'])->name('short');
