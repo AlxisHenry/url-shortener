@@ -32,9 +32,7 @@ export default function Shorts({ auth, shorts, paginate, errors }) {
     }
 
     return (
-    <App auth={auth} errors={errors} header={ <h2
-        className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Thanks for using our application 🔥
-        </h2> } >
+    <App auth={auth} errors={errors}>
 
         <Head title="URL Shortener" />
 

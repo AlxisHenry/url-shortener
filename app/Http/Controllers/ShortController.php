@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Short;
+use App\Slug;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class ShortController extends Controller
 {
@@ -28,16 +30,6 @@ class ShortController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -45,7 +37,18 @@ class ShortController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "url" => "required|url"
+        ]);
+
+        Short::create([
+            "slug" => Slug::new(),
+            "url" => $request->url,
+            "user_id" => Auth::user()->id,
+            "expires" => now()->addYears(5)
+        ]);
+
+        return Redirect::route("shorts");
     }
 
     /**
@@ -53,7 +56,17 @@ class ShortController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Short $short)
+    {
+        return redirect()->away($short->url);
+    }
+
+    /**
+     * Display the short of the current user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function user()
     {
         $shorts = Short::latest()->where("user_id", Auth::user()->id)->paginate(9);
         return Inertia::render('Profile/Shorts', [
@@ -61,37 +74,4 @@ class ShortController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

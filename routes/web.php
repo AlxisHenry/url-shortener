@@ -19,16 +19,22 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('Home', [
+        '_token' => csrf_token()
+    ]);
 })->name('home');
 
-Route::get('/shorts', [ShortController::class, "index"])->name("shorts");
+Route::get('/shorts', [ShortController::class, 'index'])->name('shorts');
 
 Route::middleware('auth')->group(function () {
+    Route::post('/shorts', [ShortController::class, 'store'])->name('short.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/my-shorts', [ShortController::class, 'show'])->name('shorts.show');
 });
+
+Route::get('/{short:slug}', [ShortController::class, 'show'])->name('short');
+
 
 require __DIR__ . '/auth.php';

@@ -25,6 +25,6 @@ class DatabaseSeeder extends Seeder
             "email" => "a@l.com"
         ]);
 
-        Short::factory(6000)->create();
+        Short::factory(1000)->create();
     }
 }
