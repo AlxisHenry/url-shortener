@@ -25,6 +25,20 @@ class DatabaseSeeder extends Seeder
             "email" => "a@l.com"
         ]);
 
-        Short::factory(1000)->create();
+        $shortCount = (int)$this->command->ask('How many short urls would you like?', 100);
+
+        if ($shortCount < 1) {
+            $shortCount = 100;
+            $this->command->warn("You must create at least 1 short url. 100 short urls will be created.\n");
+        }
+
+        $this->command->getOutput()->progressStart($shortCount);
+
+        for ($i = 0; $i < $shortCount; $i++) {
+            Short::factory()->create();
+            $this->command->getOutput()->progressAdvance();
+        }
+        
+        $this->command->getOutput()->progressFinish();
     }
 }

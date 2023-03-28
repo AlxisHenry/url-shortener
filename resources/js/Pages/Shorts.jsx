@@ -11,16 +11,20 @@ export default function Shorts({ auth, shorts, paginate, errors }) {
     let links = [];
 
     if (!shorts.links) {
+        let url = {
+            firstPage: `${shorts.path}?page=1`,
+            lastPage: `${shorts.path}?page=${paginate.pagesCount}`
+        }
         const state = {
-            previous: { url: shorts.prev_page_url, label: "⏮️ Previous", active: false },
+            previous: { url: shorts.prev_page_url ?? url.lastPage, label: "⏮️ Previous", active: false },
             current: { url: null, label: shorts.current_page, active: true },
-            next: { url: shorts.next_page_url, label: "Next ⏭️", active: false } 
+            next: { url: shorts.next_page_url ?? url.firstPage, label: "Next ⏭️", active: false } 
         }
         links = [
             state.previous,
             shorts.current_page !== 1 
                 ? { ...state.previous, label: shorts.current_page - 1 } 
-                : { ...state.next, url: `${shorts.path}?page=${paginate.pagesCount}`, label: paginate.pagesCount },
+                : { ...state.next, url: url.lastPage, label: paginate.pagesCount },
             state.current,
             shorts.current_page !== paginate.pagesCount 
                 ? { ...state.next, label: shorts.current_page + 1 } 

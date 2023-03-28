@@ -20,13 +20,12 @@ class ShortController extends Controller
     {
         $perPage = 20;
         $shorts = Short::latest()->simplePaginate($perPage);
-        $pagesCount = Short::count() / $perPage;
-        if ($pagesCount < 1) $pagesCount = 1;
+        $pagesCount = ceil(Short::count() / $perPage);
         return Inertia::render('Shorts', [
             "shorts" => $shorts,
             "paginate" => [
                 "pagesCount" => $pagesCount
-            ] 
+            ]
         ]);
     }
 
@@ -69,10 +68,14 @@ class ShortController extends Controller
      */
     public function user()
     {
-        $shorts = Short::latest()->where("user_id", Auth::user()->id)->paginate(9);
+        $perPage = 20;
+        $shorts = Short::latest()->where("user_id", Auth::user()->id)->paginate(6);
+        $pagesCount = ceil(Short::count() / $perPage);
         return Inertia::render('Profile/Shorts', [
-            "shorts" => $shorts
+            "shorts" => $shorts,
+            "paginate" => [
+                "pagesCount" => $pagesCount
+            ]
         ]);
     }
-
 }

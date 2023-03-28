@@ -10,13 +10,25 @@ export default function Pagination({ links }) {
         }
     }
 
+    const formatHtmlEntities = (str) => {
+        let entities = [ "&laquo;", "&raquo;" ];
+        let chars = [ "⏮️", "⏭️" ];
+        let string = str.toString();
+        for (let entity of entities) {
+            if (string.includes(entity)) {
+                string = string.replace(entity, chars[entities.indexOf(entity)]);
+            }
+        }
+        return string;
+    };
+
     return (
         links.length >= 3 && (
             <div className="mb-4">
                 <div className="flex flex-wrap mt-8">
                 { links.map((link, key) => ( link.url === null 
-                    ? (<div key={key} className="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded">{link.label}</div>) 
-                    : (<Link key={key} className={getClassName(link.active)} href={ link.url }>{link.label}</Link>)
+                    ? (<div key={key} className="mr-1 mb-1 px-4 py-3 text-sm leading-4 text-gray-400 border rounded">{formatHtmlEntities(link.label)}</div>) 
+                    : (<Link key={key} className={getClassName(link.active)} href={ link.url }>{formatHtmlEntities(link.label)}</Link>)
                 ))}
                 </div>
             </div>
